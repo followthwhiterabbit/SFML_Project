@@ -5,7 +5,7 @@
 #include "SFML/Graphics.hpp"
 
 
-// game wengine's class 
+// game engine's class 
 class Game
 {
 private:
@@ -33,6 +33,9 @@ private:
 	bool mIsMovingLeft = false; 
 	bool mIsMovingRight = false; 
 
+
+	static const float PlayerSpeed;  // this must be float since movement.y and movement.x are float variables 
+	static const sf::Time TimePerFrame; 
 };
 
 

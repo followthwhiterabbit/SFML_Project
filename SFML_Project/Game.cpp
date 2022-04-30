@@ -1,6 +1,10 @@
 #include "Game.h"
 
 
+const float Game::PlayerSpeed = 100.f; 
+const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f); 
+
+
 Game::Game()  // mWindow is initialized with the given VideoMode and the name of the window  
 	: mWindow(sf::VideoMode(640, 480), "SFML Application") 
 	, MPlayer()  // game constructor takes the window and the player as the parameter
@@ -15,12 +19,19 @@ Game::Game()  // mWindow is initialized with the given VideoMode and the name of
 void Game::run() // main loop of the game, it handles the lifetime of the application, An iteration of the game loop is often called frame or tick 
 {
 	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero; // we initialize the time as zero the first time 
 	// FPS : Frames per second, measurement of how many loop iterations the game can do during a second 
-	while (mWindow.isOpen())  // this returns during the game all the time 
+	while (mWindow.isOpen())  // this returns during the game all the time, this is the game loop  
 	{
-		sf::Time deltatime = clock.restart(); 
-		processEvents(); // deal with the player inputs, if we press close button on the 
-		update(); // update the game, based on the events that happened and we use the game logic here to render the new position of the game  
+		processEvents(); 
+		timeSinceLastUpdate += clock.restart(); 
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame; 
+			processEvents(); 
+			update(TimePerFrame); 
+		}
+		
 		render(); // render the game 
 	}
 		// when the run doesn't work, we basically jump to this part of code 
@@ -52,13 +63,13 @@ void Game::update(sf::Time deltatime)  // updates the game logic of the game
 {
 	sf::Vector2f movement(0.f, 0.f); // Vector2f type movement has x and y components, 
 	if (mIsMovingUp)
-		movement.y -= 1.f;  // interprets the one as a float number
+		movement.y -= PlayerSpeed;  // interprets the one as a float number
 	if (mIsMovingDown)
-		movement.y += 1.f;  // interprets the one as a float number
+		movement.y += PlayerSpeed;  // interprets the one as a float number
 	if (mIsMovingRight)
-		movement.x += 1.f;  // interprets the one as a float number
+		movement.x += PlayerSpeed;  // interprets the one as a float number
 	if (mIsMovingLeft)
-		movement.x -= 1.f;  // interprets the one as a float number
+		movement.x -= PlayerSpeed ;  // interprets the one as a float number
 
 	MPlayer.move(movement * deltatime.asSeconds()); // moves the object by a given  offset, this function adds to the current position of the object 
 
@@ -69,9 +80,9 @@ void Game::update(sf::Time deltatime)  // updates the game logic of the game
 
 void Game::render() // renders our game to the screen 
 {
-	mWindow.clear();  // clears the window firs t
+	mWindow.clear();  // clears the window first
 	mWindow.draw(MPlayer); // draws the player 
-	mWindow.display();    // displays the player 
+	mWindow.display();    // displays the mWindow with the player 
 
 
 
