@@ -6,12 +6,16 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 
 Game::Game()  // mWindow is initialized with the given VideoMode and the name of the window  
-	: mWindow(sf::VideoMode(640, 480), "SFML Application") 
-	, MPlayer()  // game constructor takes the window and the player as the parameter
+	: mWindow(sf::VideoMode(640, 480), "SFML Application")  // we crete the window 
+	, mPlayer()  // game constructor takes the window and the player as the parameter
 {
-	MPlayer.setRadius(20.f); 
-	MPlayer.setPosition(320.f, 240);
-	MPlayer.setFillColor(sf::Color::Cyan); 
+	if (!mTexture.loadFromFile("media/textures/doomer.jpg")) //mTexture holds the image 
+	{
+		// handling the loading error here 
+
+	}
+	mPlayer.setTexture(mTexture);  
+	mPlayer.setPosition(50.f, 50.f); 
 
 
 }
@@ -23,8 +27,8 @@ void Game::run() // main loop of the game, it handles the lifetime of the applic
 	// FPS : Frames per second, measurement of how many loop iterations the game can do during a second 
 	while (mWindow.isOpen())  // this returns during the game all the time, this is the game loop  
 	{
-		processEvents(); 
-		timeSinceLastUpdate += clock.restart(); 
+		processEvents();  // we process the events here 
+		timeSinceLastUpdate += clock.restart();  // we increase timeSinceLastUpdate with this statement 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			timeSinceLastUpdate -= TimePerFrame; 
@@ -71,7 +75,7 @@ void Game::update(sf::Time deltatime)  // updates the game logic of the game
 	if (mIsMovingLeft)
 		movement.x -= PlayerSpeed ;  // interprets the one as a float number
 
-	MPlayer.move(movement * deltatime.asSeconds()); // moves the object by a given  offset, this function adds to the current position of the object 
+	mPlayer.move(movement * deltatime.asSeconds()); // moves the object by a given  offset, this function adds to the current position of the object 
 
 
 
@@ -81,7 +85,7 @@ void Game::update(sf::Time deltatime)  // updates the game logic of the game
 void Game::render() // renders our game to the screen 
 {
 	mWindow.clear();  // clears the window first
-	mWindow.draw(MPlayer); // draws the player 
+	mWindow.draw(mPlayer); // draws the player 
 	mWindow.display();    // displays the mWindow with the player 
 
 

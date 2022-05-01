@@ -25,7 +25,9 @@ private:
 
 private:
 	sf::RenderWindow mWindow; 
-	sf::CircleShape MPlayer; // our player has a circle shape to start with 
+	sf::Texture mTexture; // sf::Texture holds the actual image
+	sf::Sprite mPlayer;   // sf::Sprite class that represents an instance with position and orientation 
+
 	
 	
 	bool mIsMovingUp = false;
